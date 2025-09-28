@@ -19,6 +19,12 @@ No-brainer, dumb simple HTTP(S) REST API for WireGuard.
 
 ## Installation
 
+### From Releases
+
+- Download the latest release from [Releases](https://github.com/reddec/trusted-cgi/releases/latest)
+- Unpack the archive
+- Move the binary to your `$PATH`
+
 ### From Source
 
 ```bash
