@@ -102,6 +102,9 @@ Get current WireGuard network information including all peers.
 ```json
 {
   "interface": "wg0",
+  "listen_port": 51831,
+  "public_key": "base64-encoded-public-key",
+  "fw_mark": "off",
   "peers": [
     {
       "public_key": "base64-encoded-public-key",
