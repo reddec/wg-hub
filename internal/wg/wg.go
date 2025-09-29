@@ -17,7 +17,7 @@ import (
 
 type Network struct {
 	Interface  string        `json:"interface"`
-	PrivateKey []byte        `json:"private_key"`
+	PrivateKey []byte        `json:"-"` // no need to expose
 	PublicKey  []byte        `json:"public_key"`
 	ListenPort int           `json:"listen_port"`
 	FWMark     string        `json:"fw_mark"`
@@ -121,7 +121,7 @@ func Get(ctx context.Context, name string) (*Network, error) {
 		return nil, fmt.Errorf("run wg: %w", err)
 	}
 
-	networks, err := Parse(pipe)
+	networks, err := Parse(pipe, name)
 	if err != nil {
 		return nil, fmt.Errorf("parse networks: %w", err)
 	}
@@ -132,7 +132,7 @@ func Get(ctx context.Context, name string) (*Network, error) {
 // Parse reads interface and peer information from the provided io.Reader and returns a map of Network structures.
 // Each key in the resulting map corresponds to a network interface, and its value contains details about the interface.
 // Returns an error if any parsing or decoding issue occurs during the processing of the input.
-func Parse(stream io.Reader) (*Network, error) {
+func Parse(stream io.Reader, interfaceName string) (*Network, error) {
 	var network Network
 	scanner := bufio.NewScanner(stream)
 	for scanner.Scan() {
@@ -153,7 +153,7 @@ func Parse(stream io.Reader) (*Network, error) {
 				return nil, fmt.Errorf("parse port: %w", err)
 			}
 			network = Network{
-				Interface:  parts[0],
+				Interface:  interfaceName,
 				PrivateKey: privateKey,
 				PublicKey:  publicKey,
 				ListenPort: port,
